@@ -179,8 +179,8 @@ unsigned floatScale2(unsigned uf) {
 
 首先还是需要得到 `sign,exp,frac` 的值，
 
-$$f= (-1)^s*M*(2)^E$$
-其中 $E=exp-127，M=1.frac$
+`f= (-1)^s*M*(2)^E`
+其中 `E=exp-127，M=1.frac`
 
 所以分类讨论得：
 - `E<0` 返回0
@@ -213,13 +213,13 @@ int floatFloat2Int(unsigned uf) {
 13.   floatPower2 - Return bit-level equivalent of the expression 2.0^x for any 32-bit integer x.
 
 ![IEEE754](../image/IEEE754-3.png)
-对于非规格化数而言，最小能表示的值约为$2^{-149}$，最大能表示的值为$2^{-126}$,对于规约数而言，最大能表示的值为$2^{127}$
+对于非规格化数而言，最小能表示的值约为`2^{-149}`，最大能表示的值为`2^{-126}`,对于规约数而言，最大能表示的值为`2^{127}`
 - `x<-148` 返回 0；
 - `x>127` 返回正无穷
 - `-148<=x<-126` 使用非规格化数表示
 - `-126<=x<127`使用规格化数表示
 
-由于得到的结果为$2^x$,所以再规格化数中，frac 全为0
+由于得到的结果为`2^x`,所以在规格化数中，`frac`  全为0
 
 ```c
 unsigned floatPower2(int x) {
