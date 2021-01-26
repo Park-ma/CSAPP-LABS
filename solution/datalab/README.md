@@ -39,7 +39,7 @@ int tmin(void) {
 
 ```c
 int isTmax(int x) {
-  return (!(~(x+1)^x))&!(x+1);
+  return (!(~(x+1)^x))&!!(x+1);
 }
 ```
 
@@ -49,7 +49,8 @@ int isTmax(int x) {
 
 ```c
 int allOddBits(int x) {
-  int b = (0xAAAA<<16)|0xAAAA;
+  int a = (0xAA<<8)|0xAA;
+  int b = (a<<16)|a;
   return !((x&b)^b);
 }
 ```
@@ -118,7 +119,7 @@ int isLessOrEqual(int x, int y) {
 int logicalNeg(int x) {
     int c1 = x>>31&0x1;
     int c2 = ((~x+1)>>31)&0x1;
-    return !(c1|c2);
+    return ~(c1|c2)&0x1;
 }
 ```
 

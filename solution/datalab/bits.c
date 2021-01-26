@@ -165,7 +165,7 @@ int tmin(void) {
  *   Rating: 1
  */
 int isTmax(int x) {
-  return (!(~(x+1)^x))&!(x+1);
+  return (!(~(x+1)^x))&!!(x+1);
 }
 /* 
  * allOddBits - return 1 if all odd-numbered bits in word set to 1
@@ -176,7 +176,8 @@ int isTmax(int x) {
  *   Rating: 2
  */
 int allOddBits(int x) {
-  int b = (0xAAAA<<16)|0xAAAA;
+  int a = (0xAA<<8)|0xAA;
+  int b = (a<<16)|a;
   return !((x&b)^b);
 }
 /* 
@@ -243,7 +244,7 @@ int isLessOrEqual(int x, int y) {
 int logicalNeg(int x) {
 int c1 = x>>31&0x1;
 int c2 = ((~x+1)>>31)&0x1;
-  return !(c1|c2);
+  return ~(c1|c2)&0x1;
 }
 /* howManyBits - return the minimum number of bits required to represent x in
  *             two's complement
@@ -345,13 +346,16 @@ int floatFloat2Int(unsigned uf) {
  *   Rating: 4
  */
 unsigned floatPower2(int x) {
-  if(x>127) return 0xFF<<23&(~0X10);
-  else if(x<-148) return 0;
+  if(x>127)
+    return 0xFF<<23;
+  else if(x<-148) 
+    return 0;
   else if(x>=-126){
     int exp = x+127;
     return exp<<23;
-  }else{
-    int frac = 149+x;
+  }
+  else{
+    int frac = 148+x;
     return 1<<frac;
   }
 }
