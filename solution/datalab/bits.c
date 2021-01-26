@@ -165,7 +165,7 @@ int tmin(void) {
  *   Rating: 1
  */
 int isTmax(int x) {
-  return (!(~(x+1)^x))&!!(~x);
+  return (!(~(x+1)^x))&!(x+1);
 }
 /* 
  * allOddBits - return 1 if all odd-numbered bits in word set to 1
@@ -202,8 +202,8 @@ int negate(int x) {
 int isAsciiDigit(int x) {
 
    int up = !((x>>4)^0x3);
-   int Nlow = ~(x&0xF)+1;
-   int sign = !((Nlow+0x9)&1<<31);
+   int y = ~(x&0xF)+1;
+   int sign = !((y+0x9)&1<<31);
    return up&sign;
 }
 /* 
@@ -227,8 +227,8 @@ int conditional(int x, int y, int z) {
  */
 int isLessOrEqual(int x, int y) {
   int diff_sign = (x>>31&0x1)^(y>>31&0x1);
-  int a = diff_sign&(x>>31&0x1);
-  int b = !diff_sign&!((~x+1+y)>>31&0x1);
+  int a = diff_sign&(x>>31&0x1);//异号且x<0,为1，异号且x>0 为0
+  int b = !diff_sign&!((~x+1+y)>>31&0x1);//异号肯定为0，同号不会产生溢出，得到正确结果。
   return a|b;
 }
 //4
@@ -260,10 +260,9 @@ int c2 = ((~x+1)>>31)&0x1;
 int howManyBits(int x) {
   int b16,b8,b4,b2,b1,b0;
     int flag=x>>31;
-    x=(flag&~x)|(~flag&x); //x为非正数则不变 ,x 为负数 则相当于按位取反
-    b16=!!(x>>16) <<4; //如果高16位不为0,则我们让b16=16
-    x>>=b16; //如果高16位不为0 则我们右移动16位 来看高16位的情况
-    //下面过程基本类似
+    x=(flag&~x)|(~flag&x); 
+    b16=!!(x>>16) <<4; 
+    x>>=b16; 
     b8=!!(x>>8)<<3;
     x >>= b8;
     b4 = !!(x >> 4) << 2;
@@ -313,7 +312,7 @@ unsigned floatScale2(unsigned uf) {
  *   Rating: 4
  */
 int floatFloat2Int(unsigned uf) {
-   int sign = (uf>>31)&0x1;
+  int sign = (uf>>31)&0x1;
   int exp = (uf>>23)&0xFF;
   int frac = uf&0x7FFFFF;
   int E = exp-127;
